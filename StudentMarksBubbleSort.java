@@ -1,0 +1,33 @@
+public class StudentMarksBubbleSort{
+    public static void bubbleSort(int[] marks){
+        int n = marks.length;
+        for(int i=0; i<n-1;i++){
+            boolean swapped = false;
+            for(int j = 0; j<n-i-1;j++){
+                if(marks[j] > marks[j+1]){
+                    int temp = marks[j];
+                    marks[j] = marks[j+1];
+                    marks[j+1] = temp;
+                    swapped = true;
+                }
+            }
+            if(!swapped) break; 
+        }
+    }
+    public static void printArray(int[] marks){
+        for(int i=0; i<marks.length; i++){
+            System.out.print(marks[i] + " ");
+        }
+        System.out.println();
+    }
+    public static void main(String[] args) {
+        int[] studentMarks = {78, 92, 65, 88, 73, 95, 81, 69};
+           System.out.println("Original marks:");
+        printArray(studentMarks);
+        
+        bubbleSort(studentMarks);
+        
+        System.out.println("Sorted marks (ascending order):");
+        printArray(studentMarks);
+    } 
+}
