@@ -1,0 +1,129 @@
+CLASS Pet
+    PRIVATE id, name, age, breed, color, isAdopted, adoptionDate, medicalHistory
+    
+    CONSTRUCTOR Pet(id, name, age, breed, color)
+        THIS.id = id
+        THIS.name = name
+        THIS.age = age
+        THIS.breed = breed
+        THIS.color = color
+        THIS.isAdopted = FALSE
+        THIS.adoptionDate = NULL
+        THIS.medicalHistory = EMPTY_ARRAY
+    END CONSTRUCTOR
+    
+    PUBLIC METHOD getName() RETURNS STRING
+        RETURN THIS.name
+    END METHOD
+    
+    PUBLIC METHOD getAge() RETURNS INTEGER
+        RETURN THIS.age
+    END METHOD
+    
+    PUBLIC METHOD isAvailableForAdoption() RETURNS BOOLEAN
+        RETURN NOT THIS.isAdopted
+    END METHOD
+    
+    PUBLIC METHOD adoptPet(date)
+        THIS.isAdopted = TRUE
+        THIS.adoptionDate = date
+    END METHOD
+    
+    PUBLIC ABSTRACT METHOD makeSound() RETURNS STRING
+    PUBLIC ABSTRACT METHOD getSpecialCare() RETURNS STRING
+    
+    PUBLIC METHOD getInfo() RETURNS STRING
+        RETURN "ID: " + THIS.id + ", Name: " + THIS.name + ", Age: " + THIS.age + ", Breed: " + THIS.breed + ", Available: " + (NOT THIS.isAdopted)
+    END METHOD
+END CLASS
+
+CLASS Dog EXTENDS Pet
+    PRIVATE size, isHouseTrained, goodWithKids, exerciseNeeds
+    
+    CONSTRUCTOR Dog(id, name, age, breed, color, size, isHouseTrained, goodWithKids, exerciseNeeds)
+        SUPER(id, name, age, breed, color)
+        THIS.size = size
+        THIS.isHouseTrained = isHouseTrained
+        THIS.goodWithKids = goodWithKids
+        THIS.exerciseNeeds = exerciseNeeds
+    END CONSTRUCTOR
+    
+    PUBLIC OVERRIDE METHOD makeSound() RETURNS STRING
+        RETURN "Woof!"
+    END METHOD
+    
+    PUBLIC OVERRIDE METHOD getSpecialCare() RETURNS STRING
+        RETURN "Exercise: " + THIS.exerciseNeeds + ", House trained: " + THIS.isHouseTrained
+    END METHOD
+END CLASS
+
+CLASS Cat EXTENDS Pet
+    PRIVATE isIndoor, isLitterTrained, personalityType
+    
+    CONSTRUCTOR Cat(id, name, age, breed, color, isIndoor, isLitterTrained, personalityType)
+        SUPER(id, name, age, breed, color)
+        THIS.isIndoor = isIndoor
+        THIS.isLitterTrained = isLitterTrained
+        THIS.personalityType = personalityType
+    END CONSTRUCTOR
+    
+    PUBLIC OVERRIDE METHOD makeSound() RETURNS STRING
+        RETURN "Meow!"
+    END METHOD
+    
+    PUBLIC OVERRIDE METHOD getSpecialCare() RETURNS STRING
+        RETURN "Indoor: " + THIS.isIndoor + ", Personality: " + THIS.personalityType
+    END METHOD
+END CLASS
+
+CLASS Bird EXTENDS Pet
+    PRIVATE species, canTalk, cageSize, diet
+    
+    CONSTRUCTOR Bird(id, name, age, breed, color, species, canTalk, cageSize, diet)
+        SUPER(id, name, age, breed, color)
+        THIS.species = species
+        THIS.canTalk = canTalk
+        THIS.cageSize = cageSize
+        THIS.diet = diet
+    END CONSTRUCTOR
+    
+    PUBLIC OVERRIDE METHOD makeSound() RETURNS STRING
+        IF THIS.canTalk THEN RETURN "Hello! Chirp!"
+        ELSE RETURN "Chirp!"
+    END METHOD
+    
+    PUBLIC OVERRIDE METHOD getSpecialCare() RETURNS STRING
+        RETURN "Species: " + THIS.species + ", Cage: " + THIS.cageSize + ", Diet: " + THIS.diet
+    END METHOD
+END CLASS
+
+CLASS PetAdoptionApp
+    PRIVATE pets, nextId
+    
+    CONSTRUCTOR PetAdoptionApp()
+        THIS.pets = EMPTY_ARRAY
+        THIS.nextId = 1
+    END CONSTRUCTOR
+    
+    PUBLIC METHOD addPet(pet)
+        THIS.pets.ADD(pet)
+    END METHOD
+    
+    PUBLIC METHOD adoptPet(petId, adoptionDate)
+        FOR EACH pet IN THIS.pets DO
+            IF pet.getId() == petId AND pet.isAvailableForAdoption() THEN
+                pet.adoptPet(adoptionDate)
+                RETURN TRUE
+            END IF
+        END FOR
+        RETURN FALSE
+    END METHOD
+    
+    PUBLIC METHOD displayAvailablePets()
+        FOR EACH pet IN THIS.pets DO
+            IF pet.isAvailableForAdoption() THEN
+                PRINT pet.getInfo() + " - " + pet.makeSound()
+            END IF
+        END FOR
+    END METHOD
+END CLASS
