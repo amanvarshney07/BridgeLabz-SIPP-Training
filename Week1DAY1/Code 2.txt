@@ -1,0 +1,38 @@
+Class Member{
+	Attributes:
+	String name;
+	int memberId;
+	Date membershipDate;
+	int membershipDuration;
+	Member(String name, int memberId, Date membershipDate, int membershipDuration){
+		this.name = name;
+        this.memberID = memberID;
+        this.membershipDate = membershipDate;
+        this.membershipDuration = membershipDuration;
+    }
+	 String checkMembershipValidity(Date currentDate) {
+        Date expiryDate = membershipDate + membershipDuration;
+        if (currentDate <= expiryDate) {
+            return "Membership is Valid";
+        } else {
+            return "Membership has Expired";
+        }
+    }
+	 void displayMemberDetails() {
+        print("Name: " + name);
+        print("Member ID: " + memberID);
+        print("Membership Date: " + membershipDate);
+        print("Membership Duration: " + membershipDuration);
+    }
+}	
+	public class LibraryMembershipTracker {
+    public static void main(String[] args) {
+        Member member1 = new Member("Aman", 101, "2024-01-15", 12 months);
+        member1.displayMemberDetails();
+
+        Date currentDate = "2025-01-20";
+        print(member1.checkMembershipValidity(currentDate));
+    }
+}
+
+		
