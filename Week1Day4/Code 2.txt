@@ -1,0 +1,60 @@
+BEGIN VehicleRentalSystem
+
+INTERFACE Rentable
+    FUNCTION rent() RETURNS STRING
+    FUNCTION returnVehicle() RETURNS STRING
+ENDINTERFACE
+
+ABSTRACT CLASS Vehicle IMPLEMENTS Rentable
+    STRING vehicleID
+    STRING model
+ENDCLASS
+
+CLASS Car EXTENDS Vehicle
+    FUNCTION rent() RETURNS STRING
+        RETURN "Car " + model + " rented"
+    ENDFUNCTION
+
+    FUNCTION returnVehicle() RETURNS STRING
+        RETURN "Car " + model + " returned"
+    ENDFUNCTION
+ENDCLASS
+
+CLASS Bike EXTENDS Vehicle
+    FUNCTION rent() RETURNS STRING
+        RETURN "Bike " + model + " rented"
+    ENDFUNCTION
+
+    FUNCTION returnVehicle() RETURNS STRING
+        RETURN "Bike " + model + " returned"
+    ENDFUNCTION
+ENDCLASS
+
+CLASS VehicleFactory
+    FUNCTION createVehicle(STRING type, STRING id, STRING model) RETURNS Vehicle
+        IF type == "Car" THEN
+            CREATE Car c
+            SET c.vehicleID = id
+            SET c.model = model
+            RETURN c
+        ELSE IF type == "Bike" THEN
+            CREATE Bike b
+            SET b.vehicleID = id
+            SET b.model = model
+            RETURN b
+        ENDIF
+        RETURN NULL
+    ENDFUNCTION
+ENDCLASS
+
+CREATE VehicleFactory factory = NEW VehicleFactory()
+
+Vehicle car1 = factory.createVehicle("Car", "C001", "Honda City")
+Vehicle bike1 = factory.createVehicle("Bike", "B001", "Yamaha R15")
+
+PRINT car1.rent()
+PRINT bike1.rent()
+PRINT car1.returnVehicle()
+PRINT bike1.returnVehicle()
+
+END
