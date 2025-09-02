@@ -1,0 +1,16 @@
+BEGIN StudentScoreStorage
+    CREATE HashMap<String, Integer> scores
+    PUT ("Aman", 85) INTO scores
+    PUT ("Riya", 92) INTO scores
+    PUT ("Karan", 78) INTO scores
+    PUT ("Simran", 95) INTO scores
+
+    highestScorer = scores.entrySet()
+                          .stream()
+                          .max( compare by value )
+
+    IF highestScorer exists THEN
+        PRINT "Highest Scorer: " + highestScorer.key + " with marks " + highestScorer.value
+    ENDIF
+
+END
