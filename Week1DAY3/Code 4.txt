@@ -1,0 +1,71 @@
+BEGIN MazeSolverBot
+
+CLASS MazeSolver
+    INTEGER[][] maze
+    INTEGER rows
+    INTEGER cols
+    INTEGER[][] solution
+
+    FUNCTION MazeSolver(INTEGER[][] inputMaze)
+        SET maze = inputMaze
+        SET rows = number of rows in maze
+        SET cols = number of columns in maze
+        CREATE solution[rows][cols] initialized to 0
+    ENDFUNCTION
+
+    FUNCTION solveMaze() RETURNS BOOLEAN
+        RETURN solve(0, 0)
+    ENDFUNCTION
+
+    FUNCTION solve(INTEGER x, INTEGER y) RETURNS BOOLEAN
+        IF x == rows-1 AND y == cols-1 THEN
+            solution[x][y] = 1
+            RETURN true
+        ENDIF
+
+        IF isSafe(x, y) THEN
+            solution[x][y] = 1
+
+            IF solve(x+1, y) THEN
+                RETURN true
+            ENDIF
+
+            IF solve(x, y+1) THEN
+                RETURN true
+            ENDIF
+
+            solution[x][y] = 0  // backtrack
+            RETURN false
+        ENDIF
+
+        RETURN false
+    ENDFUNCTION
+
+    FUNCTION isSafe(INTEGER x, INTEGER y) RETURNS BOOLEAN
+        RETURN x >= 0 AND x < rows AND y >= 0 AND y < cols AND maze[x][y] == 1
+    ENDFUNCTION
+
+    FUNCTION printSolution()
+        FOR i = 0 TO rows-1
+            FOR j = 0 TO cols-1
+                PRINT solution[i][j] + " "
+            ENDFOR
+            PRINT newline
+        ENDFOR
+    ENDFUNCTION
+ENDCLASS
+
+CREATE INTEGER[][] maze = [[1,0,0,0],
+                           [1,1,0,1],
+                           [0,1,0,0],
+                           [1,1,1,1]]
+
+CREATE MazeSolver solver = NEW MazeSolver(maze)
+
+IF solver.solveMaze() THEN
+    CALL solver.printSolution()
+ELSE
+    PRINT "No solution exists"
+ENDIF
+
+END
