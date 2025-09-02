@@ -1,0 +1,44 @@
+BEGIN HospitalDepartmentMapper
+
+CLASS Doctor
+    STRING name
+    STRING specialization
+ENDCLASS
+
+CLASS Hospital
+    MAP<String, LIST<Doctor>> departmentMap
+
+    FUNCTION Hospital()
+        CREATE empty MAP<String, LIST<Doctor>> departmentMap
+    ENDFUNCTION
+
+    FUNCTION addDoctor(String department, Doctor doctor)
+        IF departmentMap does not contain department THEN
+            CREATE empty LIST<Doctor> for department
+        ENDIF
+        ADD doctor TO departmentMap[department]
+    ENDFUNCTION
+
+    FUNCTION filterDoctorsBySpecialization(String specialization) RETURNS LIST<Doctor>
+        CREATE empty LIST<Doctor> filteredList
+        FOR EACH department IN departmentMap
+            FOR EACH doctor IN departmentMap[department]
+                IF doctor.specialization == specialization THEN
+                    ADD doctor TO filteredList
+                ENDIF
+            ENDFOR
+        ENDFOR
+        RETURN filteredList
+    ENDFUNCTION
+ENDCLASS
+
+CREATE Hospital hospital = NEW Hospital()
+
+ADD Doctor("Dr. A", "Cardiology") TO "Heart" department
+ADD Doctor("Dr. B", "Neurology") TO "Brain" department
+ADD Doctor("Dr. C", "Cardiology") TO "Heart" department
+
+LIST<Doctor> cardiologists = hospital.filterDoctorsBySpecialization("Cardiology")
+
+FOR EACH doctor IN cardiologists
+    PRINT doctor.name + "
