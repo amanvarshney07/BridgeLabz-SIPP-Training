@@ -1,0 +1,26 @@
+BEGIN EmployeeRecordKeeper
+
+    CLASS Employee
+        STRING name
+        STRING department
+        INTEGER salary
+    ENDCLASS
+
+    CREATE ArrayList<Employee> employees
+
+
+    ADD Employee("Aman", "IT", 50000) TO employees
+    ADD Employee("Riya", "HR", 45000) TO employees
+    ADD Employee("Karan", "IT", 55000) TO employees
+    ADD Employee("Simran", "Finance", 60000) TO employees
+
+    SET filteredEmployees = employees.stream()
+                                     .filter(employee -> employee.department == "IT")
+                                     .collect(toList)
+
+
+    FOR EACH employee IN filteredEmployees
+        PRINT employee.name + " | " + employee.department + " | " + employee.salary
+    ENDFOR
+
+END
