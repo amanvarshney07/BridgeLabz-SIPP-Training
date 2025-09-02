@@ -1,0 +1,47 @@
+BEGIN MedicalRecordManager
+
+INTERFACE Searchable
+    FUNCTION search(String query) RETURNS LIST<String>
+ENDINTERFACE
+
+INTERFACE Printable
+    FUNCTION printReport()
+ENDINTERFACE
+
+CLASS PatientReport IMPLEMENTS Searchable, Printable
+    STRING patientName
+    STRING diagnosis
+
+    FUNCTION search(String query) RETURNS LIST<String>
+        CREATE empty LIST<String> results
+        IF patientName contains query OR diagnosis contains query THEN
+            ADD "Found: " + patientName + " - " + diagnosis TO results
+        ENDIF
+        RETURN results
+    ENDFUNCTION
+
+    FUNCTION printReport()
+        PRINT "Patient: " + patientName + " | Diagnosis: " + diagnosis
+    ENDFUNCTION
+ENDCLASS
+
+CLASS LabReport IMPLEMENTS Searchable, Printable
+    STRING testName
+    STRING result
+
+    FUNCTION search(String query) RETURNS LIST<String>
+        CREATE empty LIST<String> results
+        IF testName contains query OR result contains query THEN
+            ADD "Found: " + testName + " - " + result TO results
+        ENDIF
+        RETURN results
+    ENDFUNCTION
+
+    FUNCTION printReport()
+        PRINT "Test: " + testName + " | Result: " + result
+    ENDFUNCTION
+ENDCLASS
+
+CREATE LIST<Printable> reports
+ADD NEW PatientReport("Aman", "Flu") TO reports
+ADD NEW LabReport("Blood Test", "Normal") TO reports
