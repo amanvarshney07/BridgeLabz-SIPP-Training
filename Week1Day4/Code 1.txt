@@ -1,0 +1,61 @@
+BEGIN BankingPortal
+
+CLASS Account
+    STRING accountNumber
+    STRING accountHolder
+    DOUBLE balance
+
+    FUNCTION deposit(DOUBLE amount)
+        balance = balance + amount
+    ENDFUNCTION
+
+    FUNCTION withdraw(DOUBLE amount)
+        IF balance >= amount THEN
+            balance = balance - amount
+        ELSE
+            PRINT "Insufficient balance"
+        ENDIF
+    ENDFUNCTION
+
+    FUNCTION displayBalance()
+        PRINT "Balance: " + balance
+    ENDFUNCTION
+ENDCLASS
+
+CLASS SavingAccount EXTENDS Account
+    FUNCTION withdraw(DOUBLE amount)
+        IF balance - amount >= 1000 THEN
+            balance = balance - amount
+        ELSE
+            PRINT "Cannot withdraw below minimum balance 1000"
+        ENDIF
+    ENDFUNCTION
+ENDCLASS
+
+CLASS CurrentAccount EXTENDS Account
+    DOUBLE overdraftLimit = 5000
+
+    FUNCTION withdraw(DOUBLE amount)
+        IF balance + overdraftLimit >= amount THEN
+            balance = balance - amount
+        ELSE
+            PRINT "Exceeds overdraft limit"
+        ENDIF
+    ENDFUNCTION
+ENDCLASS
+
+CREATE SavingAccount sa = NEW SavingAccount()
+SET sa.accountNumber = "S001"
+SET sa.accountHolder = "Aman"
+CALL sa.deposit(5000)
+CALL sa.withdraw(4500)
+CALL sa.displayBalance()
+
+CREATE CurrentAccount ca = NEW CurrentAccount()
+SET ca.accountNumber = "C001"
+SET ca.accountHolder = "Riya"
+CALL ca.deposit(2000)
+CALL ca.withdraw(6000)
+CALL ca.displayBalance()
+
+END
