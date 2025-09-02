@@ -1,0 +1,52 @@
+BEGIN FoodDeliverySystem
+
+CLASS Customer
+    STRING name
+    STRING address
+ENDCLASS
+
+CLASS Restaurant
+    STRING name
+    STRING location
+ENDCLASS
+
+CLASS DeliveryBoy
+    STRING name
+    STRING contactNumber
+ENDCLASS
+
+CLASS Order
+    Customer customer
+    Restaurant restaurant
+    DeliveryBoy deliveryBoy
+    LIST<String> items
+    DOUBLE totalPrice
+
+    FUNCTION Order(Customer c, Restaurant r, DeliveryBoy d, LIST<String> items, DOUBLE price)
+        SET customer = c
+        SET restaurant = r
+        SET deliveryBoy = d
+        SET this.items = items
+        SET totalPrice = price
+    ENDFUNCTION
+
+    FUNCTION displayOrder()
+        PRINT "Customer: " + customer.name
+        PRINT "Restaurant: " + restaurant.name
+        PRINT "Delivery Boy: " + deliveryBoy.name
+        PRINT "Items: " + items
+        PRINT "Total Price: " + totalPrice
+    ENDFUNCTION
+ENDCLASS
+
+CREATE Customer c = NEW Customer("Aman", "123 Street")
+CREATE Restaurant r = NEW Restaurant("Foodies", "Downtown")
+CREATE DeliveryBoy d = NEW DeliveryBoy("Ravi", "9999999999")
+
+LIST<String> items = ["Burger", "Fries", "Coke"]
+CREATE Order order = NEW Order(c, r, d, items, 500.0)
+
+CALL order.displayOrder()
+
+END
+
