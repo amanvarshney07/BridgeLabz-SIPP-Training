@@ -1,0 +1,46 @@
+BEGIN PatientRecordHashing
+
+CLASS Patient
+    STRING patientID
+    STRING name
+    INTEGER age
+    STRING diagnosis
+ENDCLASS
+
+CLASS PatientRecordManager
+    MAP<String, Patient> patientMap
+
+    FUNCTION PatientRecordManager()
+        CREATE empty MAP<String, Patient> patientMap
+    ENDFUNCTION
+
+    FUNCTION addPatient(Patient p)
+        SET patientMap[p.patientID] = p
+    ENDFUNCTION
+
+    FUNCTION getPatient(String patientID) RETURNS Patient
+        RETURN patientMap[patientID]
+    ENDFUNCTION
+
+    FUNCTION updatePatient(String patientID, Patient updatedPatient)
+        IF patientMap contains patientID THEN
+            SET patientMap[patientID] = updatedPatient
+        ENDIF
+    ENDFUNCTION
+
+    FUNCTION deletePatient(String patientID)
+        REMOVE patientMap[patientID]
+    ENDFUNCTION
+ENDCLASS
+
+CREATE PatientRecordManager manager = NEW PatientRecordManager()
+
+CREATE Patient p1 = NEW Patient("P001", "Aman", 25, "Flu")
+CREATE Patient p2 = NEW Patient("P002", "Riya", 30, "Cold")
+
+CALL manager.addPatient(p1)
+CALL manager.addPatient(p2)
+
+CALL manager.getPatient("P001")
+CALL manager.updatePatient("P002", NEW Patient("P002", "Riya", 30, "Recovered"))
+CALL manager.deleteP
