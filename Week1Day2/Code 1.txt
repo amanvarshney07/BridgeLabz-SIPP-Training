@@ -1,0 +1,39 @@
+BEGIN TrafficSignalSimulation
+
+ENUM TrafficLight
+    RED
+    GREEN
+    YELLOW
+ENDENUM
+
+CLASS TrafficSignal
+    TrafficLight currentLight
+
+    FUNCTION TrafficSignal()
+        SET currentLight = RED
+    ENDFUNCTION
+
+    FUNCTION switchLight()
+        IF currentLight == RED THEN
+            SET currentLight = GREEN
+        ELSE IF currentLight == GREEN THEN
+            SET currentLight = YELLOW
+        ELSE IF currentLight == YELLOW THEN
+            SET currentLight = RED
+        ENDIF
+    ENDFUNCTION
+
+    FUNCTION displayLight()
+        PRINT currentLight
+    ENDFUNCTION
+ENDCLASS
+
+CREATE TrafficSignal signal
+
+WHILE true
+    CALL signal.displayLight()
+    WAIT 5 seconds
+    CALL signal.switchLight()
+ENDWHILE
+
+END
