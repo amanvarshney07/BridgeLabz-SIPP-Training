@@ -1,0 +1,37 @@
+BEGIN ShoppingCartSystem
+
+CLASS Item
+    STRING name
+    DOUBLE price
+    INTEGER quantity
+ENDCLASS
+
+CLASS ShoppingCart
+    LIST<Item> cart
+
+    FUNCTION ShoppingCart()
+        CREATE empty LIST<Item> cart
+    ENDFUNCTION
+
+    FUNCTION addItem(Item item)
+        ADD item TO cart
+    ENDFUNCTION
+
+    GENERIC FUNCTION calculateTotal<T extends Item>(LIST<T> items) RETURNS DOUBLE
+        DOUBLE total = 0
+        FOR EACH item IN items
+            total = total + (item.price * item.quantity)
+        ENDFOR
+        RETURN total
+    ENDFUNCTION
+ENDCLASS
+
+CREATE ShoppingCart myCart = NEW ShoppingCart()
+
+ADD Item("Apple", 10.0, 2) TO myCart
+ADD Item("Banana", 5.0, 5) TO myCart
+
+DOUBLE totalPrice = myCart.calculateTotal(myCart.cart)
+PRINT "Total Price: " + totalPrice
+
+END
