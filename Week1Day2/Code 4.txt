@@ -1,0 +1,39 @@
+BEGIN JobScheduler
+
+CLASS Job
+    STRING jobName
+    INTEGER deadline
+    INTEGER processingTime
+ENDCLASS
+
+CLASS JobScheduler
+    PRIORITY_QUEUE<Job> jobQueue
+
+    FUNCTION JobScheduler()
+        CREATE jobQueue with comparator
+            PRIORITIZE job with earlier deadline
+            IF deadline equal THEN prioritize smaller processingTime
+    ENDFUNCTION
+
+    FUNCTION addJob(Job job)
+        INSERT job INTO jobQueue
+    ENDFUNCTION
+
+    FUNCTION executeJobs()
+        WHILE jobQueue is not empty
+            Job currentJob = REMOVE jobQueue
+            PRINT "Executing " + currentJob.jobName
+            WAIT currentJob.processingTime seconds
+        ENDWHILE
+    ENDFUNCTION
+ENDCLASS
+
+CREATE JobScheduler scheduler = NEW JobScheduler()
+
+ADD Job("Job1", 5, 3) TO scheduler
+ADD Job("Job2", 3, 2) TO scheduler
+ADD Job("Job3", 5, 1) TO scheduler
+
+CALL scheduler.executeJobs()
+
+END
