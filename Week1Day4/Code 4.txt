@@ -1,0 +1,35 @@
+BEGIN DigitalWalletReport
+
+CLASS Transaction
+    STRING transactionID
+    STRING merchant
+    STRING date  // format: YYYY-MM-DD
+    DOUBLE amount
+ENDCLASS
+
+CREATE LIST<Transaction> transactions
+
+ADD Transaction("T001", "Amazon", "2025-08-01", 500.0) TO transactions
+ADD Transaction("T002", "Flipkart", "2025-08-05", 1200.0) TO transactions
+ADD Transaction("T003", "Amazon", "2025-09-02", 700.0) TO transactions
+ADD Transaction("T004", "Flipkart", "2025-09-10", 300.0) TO transactions
+
+MAP<String, MAP<String, LIST<Transaction>>> groupedTransactions =
+    transactions.stream()
+                .collect(
+                    groupingBy(
+                        transaction -> transaction.merchant,
+                        groupingBy(transaction -> substring(transaction.date, 0, 7)) // year-month
+                    )
+                )
+
+FOR EACH merchant IN groupedTransactions.keySet()
+    PRINT "Merchant: " + merchant
+    FOR EACH month IN groupedTransactions[merchant].keySet()
+        LIST<Transaction> monthTransactions = groupedTransactions[merchant][month]
+        DOUBLE totalAmount = monthTransactions.stream().mapToDouble(t -> t.amount).sum()
+        PRINT "Month: " + month + " | Transactions: " + monthTransactions.size() + " | Total: " + totalAmount
+    ENDFOR
+ENDFOR
+
+END
